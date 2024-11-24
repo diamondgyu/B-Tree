@@ -1,0 +1,6 @@
+해야 할 일
+- page를 기반으로 읽고 쓰는 데 감을 좀 잡자.
+- 기존 코드를 기반으로 page를 잘 적용해 보자.
+
+
+valgrind --leak-check=full --log-file=log.txt ./main

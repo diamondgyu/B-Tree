@@ -1,0 +1,416 @@
+==3254== Memcheck, a memory error detector
+==3254== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3254== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==3254== Command: ./main
+==3254== Parent PID: 958
+==3254== 
+==3254== Invalid read of size 4
+==3254==    at 0x109D83: db_find (bpt.c:170)
+==3254==    by 0x10ADD0: db_insert (bpt.c:445)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab2988 is 8 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 4
+==3254==    at 0x109DD9: db_find (bpt.c:180)
+==3254==    by 0x10ADD0: db_insert (bpt.c:445)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab298c is 12 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 8
+==3254==    at 0x109DAB: db_find (bpt.c:181)
+==3254==    by 0x10ADD0: db_insert (bpt.c:445)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab2a00 is 128 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 4
+==3254==    at 0x10AED9: db_insert (bpt.c:452)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab2988 is 8 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 4
+==3254==    at 0x10AEEB: db_insert (bpt.c:465)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab298c is 12 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 8
+==3254==    at 0x10A791: insert_into_leaf_or_rotate (bpt.c:340)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab29f8 is 120 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 4
+==3254==    at 0x10A7A5: insert_into_leaf_or_rotate (bpt.c:341)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab2988 is 8 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 8
+==3254==    at 0x10A811: insert_into_leaf_or_rotate (bpt.c:349)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab2a00 is 128 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 4
+==3254==    at 0x10A8A6: insert_into_leaf_or_rotate (bpt.c:351)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab298c is 12 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 8
+==3254==    at 0x10A861: insert_into_leaf_or_rotate (bpt.c:353)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab2a00 is 128 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid write of size 8
+==3254==    at 0x10A929: insert_into_leaf_or_rotate (bpt.c:363)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab2a00 is 128 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 1
+==3254==    at 0x484F2FF: __strncpy_sse2_unaligned (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10A96E: insert_into_leaf_or_rotate (bpt.c:364)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab2a08 is 136 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid write of size 1
+==3254==    at 0x484F310: __strncpy_sse2_unaligned (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10A96E: insert_into_leaf_or_rotate (bpt.c:364)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab2a08 is 136 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 1
+==3254==    at 0x484F31D: __strncpy_sse2_unaligned (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10A96E: insert_into_leaf_or_rotate (bpt.c:364)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab2a09 is 137 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Source and destination overlap in strncpy(0x4ab2a0c, 0x4ab2a0c, 120)
+==3254==    at 0x484F384: __strncpy_sse2_unaligned (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10A96E: insert_into_leaf_or_rotate (bpt.c:364)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254== 
+==3254== Invalid write of size 1
+==3254==    at 0x484F39C: __strncpy_sse2_unaligned (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10A96E: insert_into_leaf_or_rotate (bpt.c:364)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab2a0c is 140 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 8
+==3254==    at 0x10A99B: insert_into_leaf_or_rotate (bpt.c:369)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254==  Address 0x4ab29f8 is 120 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== Invalid read of size 8
+==3254==    at 0x10AF9B: print_page (bpt.c:625)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Address 0x4ab7d40 is 0 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x109432: main (main.c:30)
+==3254== 
+==3254== Invalid read of size 4
+==3254==    at 0x10AFBD: print_page (bpt.c:626)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Address 0x4ab7d48 is 8 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x109432: main (main.c:30)
+==3254== 
+==3254== Invalid read of size 4
+==3254==    at 0x10AFDF: print_page (bpt.c:627)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Address 0x4ab7d4c is 12 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x109432: main (main.c:30)
+==3254== 
+==3254== Invalid read of size 4
+==3254==    at 0x10B092: print_page (bpt.c:629)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Address 0x4ab7d4c is 12 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x109432: main (main.c:30)
+==3254== 
+==3254== Invalid read of size 4
+==3254==    at 0x10B025: print_page (bpt.c:630)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Address 0x4ab7d48 is 8 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x109432: main (main.c:30)
+==3254== 
+==3254== Invalid read of size 8
+==3254==    at 0x10B040: print_page (bpt.c:631)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Address 0x4ab7dc0 is 128 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x109432: main (main.c:30)
+==3254== 
+==3254== Invalid read of size 4
+==3254==    at 0x10B0A8: print_page (bpt.c:636)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Address 0x4ab7d48 is 8 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x109432: main (main.c:30)
+==3254== 
+==3254== Invalid free() / delete / delete[] / realloc()
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Address 0x4ab7d40 is 0 bytes inside a block of size 4,096 free'd
+==3254==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10B14B: print_page (bpt.c:642)
+==3254==    by 0x10B1CE: print_tree (bpt.c:653)
+==3254==    by 0x1094F8: main (main.c:48)
+==3254==  Block was alloc'd at
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x109432: main (main.c:30)
+==3254== 
+==3254== 
+==3254== HEAP SUMMARY:
+==3254==     in use at exit: 128,000 bytes in 35 blocks
+==3254==   total heap usage: 51 allocs, 17 frees, 193,536 bytes allocated
+==3254== 
+==3254== 512 bytes in 2 blocks are definitely lost in loss record 1 of 5
+==3254==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10A7C9: insert_into_leaf_or_rotate (bpt.c:343)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254== 
+==3254== 512 bytes in 2 blocks are definitely lost in loss record 2 of 5
+==3254==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x10A7D7: insert_into_leaf_or_rotate (bpt.c:344)
+==3254==    by 0x10AF3C: db_insert (bpt.c:468)
+==3254==    by 0x109432: main (main.c:30)
+==3254== 
+==3254== 4,096 bytes in 1 blocks are definitely lost in loss record 4 of 5
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x109CB8: start_new_file (bpt.c:160)
+==3254==    by 0x10ADA2: db_insert (bpt.c:440)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== 118,784 bytes in 29 blocks are definitely lost in loss record 5 of 5
+==3254==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3254==    by 0x1095D8: load_page (bpt.c:38)
+==3254==    by 0x10AF52: db_insert (bpt.c:471)
+==3254==    by 0x10939D: main (main.c:15)
+==3254== 
+==3254== LEAK SUMMARY:
+==3254==    definitely lost: 123,904 bytes in 34 blocks
+==3254==    indirectly lost: 0 bytes in 0 blocks
+==3254==      possibly lost: 0 bytes in 0 blocks
+==3254==    still reachable: 4,096 bytes in 1 blocks
+==3254==         suppressed: 0 bytes in 0 blocks
+==3254== Reachable blocks (those to which a pointer was found) are not shown.
+==3254== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==3254== 
+==3254== For lists of detected and suppressed errors, rerun with: -s
+==3254== ERROR SUMMARY: 8303 errors from 29 contexts (suppressed: 0 from 0)
