@@ -15,8 +15,10 @@ int main(){
         db_insert(i*3, "test");
     }
 
-    for(int i=0; i<24; i++)
+    for(int i=0; i<25; i++)
         if (i%3 != 0) db_insert(i, "test");
+
+    db_insert(25, "sdf");
 
     //
     printf("Running...\n");

@@ -337,52 +337,60 @@ void insert_into_new_root(page* left, off_t left_offset, int64_t key, page* righ
 }
 
 void insert_into_leaf_or_rotate(page* leaf, off_t offset, int64_t key, char* value) {
-    // if (leaf->next_offset != 0)
-    // {
-    //     page* next_leaf = load_page(leaf->next_offset);
-    //     // next leaf가 존재하고 빈 공간이 있다면 rotate
-    //     if (leaf->is_leaf && next_leaf->num_of_keys < LEAF_MAX) {
+    
+    if (leaf->next_offset != 0)
+    {
+        page* next_leaf = load_page(leaf->next_offset);
+        // next leaf가 존재하고 빈 공간이 있다면 rotate
+        if (leaf->is_leaf && next_leaf->num_of_keys < LEAF_MAX) {
             
-    //         int64_t* temp_keys = malloc(sizeof(int64_t) * (LEAF_MAX + 1));
-    //         char** temp_values = malloc(sizeof(char*) * (LEAF_MAX + 1));
-    //         int insertion_index, split, i, j;
+            int64_t* temp_keys = malloc(sizeof(int64_t) * (LEAF_MAX + 1));
+            char** temp_values = malloc(sizeof(char*) * (LEAF_MAX + 1));
+            int insertion_index, split, i, j;
 
-    //         off_t new_page_offset = new_page();
+            off_t new_page_offset = new_page();
 
-    //         for (insertion_index = 0; insertion_index < LEAF_MAX && leaf->records[insertion_index].key < key; insertion_index++);
+            for (insertion_index = 0; insertion_index < LEAF_MAX && leaf->records[insertion_index].key < key; insertion_index++);
 
-    //         for (i = 0, j = 0; i < leaf->num_of_keys; i++, j++) {
-    //             if (j == insertion_index) j++;
-    //             temp_keys[j] = leaf->records[i].key;
-    //             temp_values[j] = leaf->records[i].value;
-    //         }
+            for (i = 0, j = 0; i < leaf->num_of_keys; i++, j++) {
+                if (j == insertion_index) j++;
+                temp_keys[j] = leaf->records[i].key;
+                temp_values[j] = leaf->records[i].value;
+            }
 
-    //         temp_keys[insertion_index] = key;
-    //         temp_values[insertion_index] = value;
+            temp_keys[insertion_index] = key;
+            temp_values[insertion_index] = value;
+            leaf->num_of_keys = 0;
 
-    //         // temp_values의 값들을 leaf에 복사
-    //         for (i = 0; i < LEAF_MAX + 1; i++) {
-    //             if (i < LEAF_MAX) {
-    //                 leaf->records[i].key = temp_keys[i];
-    //                 strncpy(leaf->records[i].value, temp_values[i], 120);
-    //             }
-    //         }
+            // temp_values의 값들을 leaf에 복사
+            for (i = 0; i < LEAF_MAX + 1; i++) {
+                if (i < LEAF_MAX) {
+                    leaf->records[i].key = temp_keys[i];
+                    strncpy(leaf->records[i].value, temp_values[i], 120);
+                    leaf->num_of_keys++;
+                }
+            }
 
-    //         // 가장 큰 값은 next_leaf에 추가
-    //         insert_into_leaf(next_leaf, leaf->next_offset, temp_keys[LEAF_MAX], temp_values[LEAF_MAX]);
+            // 가장 큰 값은 next_leaf에 추가
+            insert_into_leaf(next_leaf, leaf->next_offset, temp_keys[LEAF_MAX], temp_values[LEAF_MAX]);
 
-    //         // 부모의 index에 있는 key값을 이번 들어온 값으로 변경
-    //         page* parent = load_page(leaf->parent_page_offset);
-    //         int parent_index = find_key_index(leaf);
-    //         parent->b_f[parent_index].key = temp_keys[LEAF_MAX];
-    //         parent->num_of_keys++;
+            // 부모의 index에 있는 key값을 최댓값으로 변경
+            page* parent = load_page(leaf->parent_page_offset);
+            int parent_index;
+            for (parent_index=0; parent->b_f[parent_index].p_offset!=leaf->next_offset; parent_index++);
+            
+            parent->b_f[parent_index].key = temp_keys[LEAF_MAX];
+            pwrite(fd, parent, sizeof(page), leaf->parent_page_offset);
+            pwrite(fd, leaf, sizeof(page), offset);
 
-    //         free(next_leaf);
-    //         return;
-    //     }
+            free(temp_keys);
+            free(temp_values);
+            free(next_leaf);
+            return;
+        }
 
-    //     free(next_leaf);
-    // }
+        free(next_leaf);
+    }
     
 
     page* new_leaf;
