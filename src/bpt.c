@@ -170,7 +170,7 @@ char* db_find(int64_t key)
     while (!current->is_leaf) 
     {
         int i;
-        for (i = 0; key < current->b_f[i].key || i>=current->num_of_keys; i++);
+        for (i = 0; key > current->b_f[i].key && i<current->num_of_keys; i++);
 
         if (i==0) current = load_page(current->next_offset);
         else current = load_page(current->b_f[i-1].p_offset);
@@ -337,52 +337,52 @@ void insert_into_new_root(page* left, off_t left_offset, int64_t key, page* righ
 }
 
 void insert_into_leaf_or_rotate(page* leaf, off_t offset, int64_t key, char* value) {
-    if (leaf->next_offset != 0)
-    {
-        page* next_leaf = load_page(leaf->next_offset);
-        // next leaf가 존재하고 빈 공간이 있다면 rotate
-        if (leaf->is_leaf && next_leaf->num_of_keys < LEAF_MAX) {
+    // if (leaf->next_offset != 0)
+    // {
+    //     page* next_leaf = load_page(leaf->next_offset);
+    //     // next leaf가 존재하고 빈 공간이 있다면 rotate
+    //     if (leaf->is_leaf && next_leaf->num_of_keys < LEAF_MAX) {
             
-            int64_t* temp_keys = malloc(sizeof(int64_t) * (LEAF_MAX + 1));
-            char** temp_values = malloc(sizeof(char*) * (LEAF_MAX + 1));
-            int insertion_index, split, i, j;
+    //         int64_t* temp_keys = malloc(sizeof(int64_t) * (LEAF_MAX + 1));
+    //         char** temp_values = malloc(sizeof(char*) * (LEAF_MAX + 1));
+    //         int insertion_index, split, i, j;
 
-            off_t new_page_offset = new_page();
+    //         off_t new_page_offset = new_page();
 
-            for (insertion_index = 0; insertion_index < LEAF_MAX && leaf->records[insertion_index].key < key; insertion_index++);
+    //         for (insertion_index = 0; insertion_index < LEAF_MAX && leaf->records[insertion_index].key < key; insertion_index++);
 
-            for (i = 0, j = 0; i < leaf->num_of_keys; i++, j++) {
-                if (j == insertion_index) j++;
-                temp_keys[j] = leaf->records[i].key;
-                temp_values[j] = leaf->records[i].value;
-            }
+    //         for (i = 0, j = 0; i < leaf->num_of_keys; i++, j++) {
+    //             if (j == insertion_index) j++;
+    //             temp_keys[j] = leaf->records[i].key;
+    //             temp_values[j] = leaf->records[i].value;
+    //         }
 
-            temp_keys[insertion_index] = key;
-            temp_values[insertion_index] = value;
+    //         temp_keys[insertion_index] = key;
+    //         temp_values[insertion_index] = value;
 
-            // temp_values의 값들을 leaf에 복사
-            for (i = 0; i < LEAF_MAX + 1; i++) {
-                if (i < LEAF_MAX) {
-                    leaf->records[i].key = temp_keys[i];
-                    strncpy(leaf->records[i].value, temp_values[i], 120);
-                }
-            }
+    //         // temp_values의 값들을 leaf에 복사
+    //         for (i = 0; i < LEAF_MAX + 1; i++) {
+    //             if (i < LEAF_MAX) {
+    //                 leaf->records[i].key = temp_keys[i];
+    //                 strncpy(leaf->records[i].value, temp_values[i], 120);
+    //             }
+    //         }
 
-            // 가장 큰 값은 next_leaf에 추가
-            insert_into_leaf(next_leaf, leaf->next_offset, temp_keys[LEAF_MAX], temp_values[LEAF_MAX]);
+    //         // 가장 큰 값은 next_leaf에 추가
+    //         insert_into_leaf(next_leaf, leaf->next_offset, temp_keys[LEAF_MAX], temp_values[LEAF_MAX]);
 
-            // 부모의 index에 있는 key값을 이번 들어온 값으로 변경
-            page* parent = load_page(leaf->parent_page_offset);
-            int parent_index = find_key_index(leaf);
-            parent->b_f[parent_index].key = temp_keys[LEAF_MAX];
-            parent->num_of_keys++;
+    //         // 부모의 index에 있는 key값을 이번 들어온 값으로 변경
+    //         page* parent = load_page(leaf->parent_page_offset);
+    //         int parent_index = find_key_index(leaf);
+    //         parent->b_f[parent_index].key = temp_keys[LEAF_MAX];
+    //         parent->num_of_keys++;
 
-            free(next_leaf);
-            return;
-        }
+    //         free(next_leaf);
+    //         return;
+    //     }
 
-        free(next_leaf);
-    }
+    //     free(next_leaf);
+    // }
     
 
     page* new_leaf;
@@ -437,7 +437,6 @@ void insert_into_leaf_or_rotate(page* leaf, off_t offset, int64_t key, char* val
     int64_t new_key = new_leaf->records[0].key;
     insert_into_parent(leaf, offset, new_key, new_leaf, new_page_offset);
 
-    free(next_leaf);
     free(new_leaf);
 }
 
@@ -464,7 +463,7 @@ int db_insert(int64_t key, char* value) {
     {
         int i;
         for (i = 0; i < leaf->num_of_keys; i++) 
-            if (key < leaf->b_f[i].key)
+            if (key <= leaf->b_f[i].key)
                 break;
         // 첫번째부터 탈락하면 (첫 노드보다 새 입력이 적으면) 최하위 child로 보낸다
         if (i==0) offset_child = leaf->next_offset;
@@ -644,13 +643,12 @@ void print_page(page* p, char* add_tab) {
             printf("%-2ld ", p->b_f[i].key);
     }
     printf("\n");
-    if (!p->is_leaf) 
+    if (!p->is_leaf)
     {
         print_page(load_page(p->next_offset), strcat(add_tab, "    "));
         for (int i = 0; i < p->num_of_keys; i++) 
             print_page(load_page(p->b_f[i].p_offset), add_tab);
     }
-    free(p);
 }
 
 void print_tree() {

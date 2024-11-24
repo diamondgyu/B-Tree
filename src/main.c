@@ -9,15 +9,14 @@ int main(){
 
     // instructions
 
-    for(int i=0; i<93; i++)
+    for(int i=0; i<31; i++)
     {
-        printf("%d\n", i);
+        printf("%d\n", i*3);
         db_insert(i*3, "test");
     }
 
-
-    // for(int i=0; i<23; i++)
-    //     if (i%3 != 0) db_insert(i, "test");
+    for(int i=0; i<24; i++)
+        if (i%3 != 0) db_insert(i, "test");
 
     //
     printf("Running...\n");
