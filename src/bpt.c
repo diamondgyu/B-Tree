@@ -161,6 +161,7 @@ void start_new_file(record rec) {
     rt = load_page(hp->rpo);
 }
 
+// 탐색 함수
 char* db_find(int64_t key) 
 {
     if (rt == NULL) 
@@ -207,6 +208,7 @@ int insert_into_leaf(page* leaf, off_t offset, int64_t key, char* value) {
     return 0;
 }
 
+// leaf node가 아닌 곳에 insert시 호출
 void insert_into_parent(page* left, off_t left_offset, int64_t key, page* right, off_t right_offset) {
 
     // if splitting happens in the root
@@ -218,7 +220,7 @@ void insert_into_parent(page* left, off_t left_offset, int64_t key, page* right,
     page* parent = load_page(left->parent_page_offset);
     int left_index = 0;
 
-    // Find left_index
+    // 왼쪽 index를 찾는다.
     while (left_index <= parent->num_of_keys && 
            parent->b_f[left_index].p_offset != left_offset) {
         left_index++;
@@ -242,9 +244,8 @@ void insert_into_parent(page* left, off_t left_offset, int64_t key, page* right,
         return;
     }
 
-    // Harder case: split a node in order to preserve the B+ tree properties
+    // 여기부터는 parent에도 빈 공간이 없는 case -> 재귀적으로 빈 공간이 생길 때까지 탐색한다.
     page* new_parent = (page*)calloc(1, sizeof(page));
-    // I_R* temp = (I_R*)calloc(INTERNAL_MAX + 1, sizeof(I_R));
     int64_t* temp_keys = (int64_t*)calloc(INTERNAL_MAX + 1, sizeof(int64_t));
     off_t* temp_offsets = (off_t*)calloc(INTERNAL_MAX + 1, sizeof(off_t));
     
@@ -280,7 +281,7 @@ void insert_into_parent(page* left, off_t left_offset, int64_t key, page* right,
     free(temp_keys);
     free(temp_offsets);
 
-    new_parent->next_offset = right_offset;
+    new_parent->next_offset = parent->b_f[split-1].p_offset;
 
     off_t new_parent_offset = new_page();
 
@@ -302,7 +303,7 @@ void insert_into_parent(page* left, off_t left_offset, int64_t key, page* right,
         free(child);
     }
 
-    // Insert a new key into the parent of the two nodes resulting from the split
+    // 현재 수정하는 노드가 root인지 아닌지에 따라 호출 결정
     if (parent->parent_page_offset != 0) {
         insert_into_parent(parent, left->parent_page_offset, k_prime, new_parent, new_parent_offset);
     } else {
@@ -313,6 +314,7 @@ void insert_into_parent(page* left, off_t left_offset, int64_t key, page* right,
     free(parent);
 }
 
+// 새로운 root node를 생성해야 하는 경우 호출
 int insert_into_new_root(page* left, off_t left_offset, int64_t key, page* right, off_t right_offset) {
     page* root = (page*)calloc(1, sizeof(page));
     off_t root_offset = new_page();
@@ -342,6 +344,7 @@ int insert_into_new_root(page* left, off_t left_offset, int64_t key, page* right
     rt = root;
 }
 
+// 가득찬 leaf node에 새로운 key를 삽입하는 경우
 int insert_into_leaf_or_rotate(page* leaf, off_t offset, int64_t key, char* value) {
     
     if (leaf->next_offset != 0)
@@ -429,10 +432,6 @@ int insert_into_leaf_or_rotate(page* leaf, off_t offset, int64_t key, char* valu
         leaf->num_of_keys++;
     }
 
-    // for (i = split; i < LEAF_MAX + 1; i++) {
-    //     leaf->records[i] = NULL;
-    // }
-
     for (i = split, j = 0; i < LEAF_MAX + 1; i++, j++) {
         new_leaf->records[j].key = temp_keys[i];
         strncpy(new_leaf->records[j].value, temp_values[i], 120);
@@ -468,7 +467,7 @@ int db_insert(int64_t key, char* value) {
 
     char* dup = db_find(key);
     if (dup != NULL) {
-        return -1; // Key already exists
+        return -1; // Key가 이미 존재하는 경우
     }       
 
     page* leaf = rt;
@@ -530,6 +529,7 @@ int get_neighbor_index(page* p, off_t p_offset) {
     return -1;
 }
 
+// index에 해당하는 offset을 리턴
 off_t get_neighbor_offset(page* p, int index)
 {
     page* parent = load_page(p->parent_page_offset);
@@ -538,6 +538,7 @@ off_t get_neighbor_offset(page* p, int index)
     else return parent->b_f[index].p_offset;
 }
 
+// offset에 대응되는 key값을 리턴
 int get_parent_key(page* p, off_t offset)
 {
     page* parent = load_page(p->parent_page_offset);
@@ -547,6 +548,7 @@ int get_parent_key(page* p, off_t offset)
     return -1;
 }
 
+// offset에 대응되는 b_f 상의 index를 리턴
 int get_parent_key_index(page* p, off_t page_offset)
 {
     page* parent = load_page(p->parent_page_offset);
@@ -556,6 +558,7 @@ int get_parent_key_index(page* p, off_t page_offset)
     return -1;
 }
 
+// delete 시 node 를 합칠 수 있다면 합치는 기능 구현
 void coalesce_nodes(page* p, off_t p_offset, page* neighbor, off_t neighbor_offset, int neighbor_index) {
     int i, j, neighbor_insertion_index;
     page* tmp;
@@ -685,6 +688,7 @@ void adjust_root()
     pwrite(fd, hp, sizeof(H_P), 0);
 }
 
+// 특정 노드에서 특정 값을 빼는 함수
 int delete_entry(page* p, off_t p_offset, int key_index) {
     int i, min_keys, neighbor_index, capacity, k_prime, k_prime_index;
     page* neighbor;
@@ -728,7 +732,7 @@ int delete_entry(page* p, off_t p_offset, int key_index) {
     k_prime = load_page(p->parent_page_offset)->b_f[k_prime_index].key;
 
     capacity = p->is_leaf ? LEAF_MAX : INTERNAL_MAX - 1;
-    // Coalescence or redistribution
+    // 결합 혹은 redistribute 중 적합한 것을 선책한다.
     if (neighbor->num_of_keys + p->num_of_keys < capacity) {
         coalesce_nodes(p, p_offset, neighbor, neighbor_offset, neighbor_index);
     } else {

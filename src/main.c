@@ -1,25 +1,31 @@
 #include "bpt.h"
 
 int main(){
+
     int64_t input;
     char instruction;
     char buf[120];
     char *result;
     open_table("DB2021083681.db");
 
+    FILE *log;
+ 
+    log = fopen("log.txt", "w");
+
     // instructions
 
-    for(int i=0; i<48; i++)
+    for(int i=0; i<4000; i++)
     {
-        printf("%d\n", i);
         db_insert(i, "test");
     }
 
-    db_delete(1);
+    for(int i=1984; i<3000; i++)
+    {
+        int result = db_delete(i);
+        fprintf(log, "%d, %d %d\n", result, load_page(rt->next_offset)->num_of_keys, load_page(rt->b_f[0].p_offset)->num_of_keys);
+    }
 
-    db_delete(2);
-
-    for(int i=16; i<31; i++) db_delete(i);
+    fflush();
 
     //
     printf("Running...\n");
