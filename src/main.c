@@ -9,13 +9,17 @@ int main(){
 
     // instructions
 
-    for(int i=0; i<32; i++)
+    for(int i=0; i<48; i++)
     {
-        printf("%d\n", i*3);
-        db_insert(i*3, "test");
+        printf("%d\n", i);
+        db_insert(i, "test");
     }
 
-    db_delete(48);
+    db_delete(1);
+
+    db_delete(2);
+
+    for(int i=16; i<31; i++) db_delete(i);
 
     //
     printf("Running...\n");
