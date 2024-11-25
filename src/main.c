@@ -9,16 +9,13 @@ int main(){
 
     // instructions
 
-    for(int i=0; i<31; i++)
+    for(int i=0; i<32; i++)
     {
         printf("%d\n", i*3);
         db_insert(i*3, "test");
     }
 
-    for(int i=0; i<25; i++)
-        if (i%3 != 0) db_insert(i, "test");
-
-    db_insert(25, "sdf");
+    db_delete(48);
 
     //
     printf("Running...\n");
@@ -46,7 +43,7 @@ int main(){
                 db_delete(input);
                 break;
             case 'p':
-                print_tree();
+                pt();
                 break;
             case 'q':
                 while (getchar() != (int)'\n');
