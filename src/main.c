@@ -14,8 +14,11 @@ int main(){
 
     // instructions
 
-    for(int i=-48; i<4000; i++)
-    {
+    for(int i=0; i<4000; i++) {
+        db_insert(i, "test");
+    }
+
+    for(int i=-48; i<0; i++) {
         db_insert(i, "test");
     }
 
@@ -25,8 +28,7 @@ int main(){
     // Deletes two leaf nodes of rt->next_offset completely (125->123)
     // So rt->next offset does not have enough children
     // Sibling has 127 nodes -> internal redistribution
-    for(int i=2000; i<2017; i++)
-    {
+    for(int i=2000; i<2017; i++) {
         db_delete(i);
     }   
 
