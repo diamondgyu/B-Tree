@@ -264,15 +264,15 @@ void insert_into_parent(page* left, off_t left_offset, int64_t key, page* right,
     
     int split = cut(INTERNAL_MAX);
     
-    for (int i = 0; i < split-1; i++) {
+    for (int i = 0; i < split; i++) {
         parent->b_f[i].key = temp_keys[i];
         parent->b_f[i].p_offset = temp_offsets[i];
         parent->num_of_keys++;
     }
 
-    int k_prime = temp_keys[split - 1];
+    int k_prime = temp_keys[split];
     
-    for (int i = split, j = 0; i < INTERNAL_MAX+1; i++, j++) {
+    for (int i = split+1, j = 0; i < INTERNAL_MAX+1; i++, j++) {
         new_parent->b_f[j].key = temp_keys[i];
         new_parent->b_f[j].p_offset = temp_offsets[i];
         new_parent->num_of_keys++;
@@ -281,7 +281,7 @@ void insert_into_parent(page* left, off_t left_offset, int64_t key, page* right,
     free(temp_keys);
     free(temp_offsets);
 
-    new_parent->next_offset = parent->b_f[split-1].p_offset;
+    new_parent->next_offset = parent->b_f[split].p_offset;
 
     off_t new_parent_offset = new_page();
 
@@ -569,6 +569,7 @@ void coalesce_nodes(page* p, off_t p_offset, page* neighbor, off_t neighbor_offs
         tmp = p;
         p = neighbor;
         neighbor = tmp;
+
         tmp_off = p_offset;
         p_offset = neighbor_offset;
         neighbor_offset = tmp_off;
@@ -578,11 +579,12 @@ void coalesce_nodes(page* p, off_t p_offset, page* neighbor, off_t neighbor_offs
     // leaf가 아닌 경우
     if (!p->is_leaf) {
         // Append k_prime
-        neighbor->b_f[neighbor_insertion_index].key = get_parent_key(p, neighbor_index);
+        neighbor->b_f[neighbor_insertion_index].key = get_parent_key(p, p_offset);
         neighbor->b_f[neighbor_insertion_index].p_offset = p->next_offset;
         neighbor->num_of_keys++;
         // Append p's children to neighbor
-        for (i = 0, j = neighbor_insertion_index + 1; i < p->num_of_keys + 1; i++, j++) {
+        int p_key_n = p->num_of_keys;
+        for (i = 0, j = neighbor_insertion_index + 1; i < p_key_n; i++, j++) {
             neighbor->b_f[j] = p->b_f[i];
             neighbor->num_of_keys++;
             p->num_of_keys--;
@@ -632,6 +634,7 @@ void redistribute_nodes(page* p, off_t p_offset, page* neighbor, off_t neighbor_
             for (i = p->num_of_keys; i > 0; i--)
                 p->b_f[i] = p->b_f[i - 1];
             p->b_f[0].key = parent->b_f[neighbor_index+1].key;
+            p->b_f[0].p_offset = p->next_offset;
             p->next_offset = neighbor->b_f[neighbor->num_of_keys - 1].p_offset;
             parent->b_f[neighbor_index+1].key = neighbor->b_f[neighbor->num_of_keys - 1].key;
         // p가 leaf인 경우
@@ -647,7 +650,7 @@ void redistribute_nodes(page* p, off_t p_offset, page* neighbor, off_t neighbor_
         if (!p->is_leaf) {
             p->b_f[p->num_of_keys].key = parent->b_f[0].key;
             p->b_f[p->num_of_keys].p_offset = neighbor->next_offset;
-            parent->b_f[0].key = neighbor->b_f[1].key;
+            parent->b_f[0].key = neighbor->b_f[0].key;
             neighbor->next_offset = neighbor->b_f[0].p_offset;
             for (i = 0; i < neighbor->num_of_keys - 1; i++)
                 neighbor->b_f[i] = neighbor->b_f[i + 1];
@@ -731,9 +734,11 @@ int delete_entry(page* p, off_t p_offset, int key_index) {
     k_prime_index = neighbor_index == -1 ? 0 : neighbor_index;
     k_prime = load_page(p->parent_page_offset)->b_f[k_prime_index].key;
 
+    pwrite(fd, p, sizeof(page), p_offset);
+
     capacity = p->is_leaf ? LEAF_MAX : INTERNAL_MAX - 1;
     // 결합 혹은 redistribute 중 적합한 것을 선책한다.
-    if (neighbor->num_of_keys + p->num_of_keys < capacity) {
+    if (neighbor->num_of_keys + p->num_of_keys <= capacity) {
         coalesce_nodes(p, p_offset, neighbor, neighbor_offset, neighbor_index);
     } else {
         redistribute_nodes(p, p_offset, neighbor, neighbor_offset, neighbor_index);

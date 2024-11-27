@@ -14,18 +14,27 @@ int main(){
 
     // instructions
 
-    for(int i=0; i<4000; i++)
+    for(int i=-48; i<4000; i++)
     {
         db_insert(i, "test");
     }
 
-    for(int i=1984; i<3000; i++)
-    {
-        int result = db_delete(i);
-        fprintf(log, "%d, %d %d\n", result, load_page(rt->next_offset)->num_of_keys, load_page(rt->b_f[0].p_offset)->num_of_keys);
-    }
+    pr();
+    printf("# of Keys in Children: %d %d\n", load_page(rt->next_offset)->num_of_keys, load_page(rt->b_f[0].p_offset)->num_of_keys);
 
-    fflush();
+    // Deletes two leaf nodes of rt->next_offset completely (125->123)
+    // So rt->next offset does not have enough children
+    // Sibling has 127 nodes -> internal redistribution
+    for(int i=2000; i<2017; i++)
+    {
+        db_delete(i);
+    }   
+
+    pr();
+    printf("# of Keys in Children: %d %d\n", load_page(rt->next_offset)->num_of_keys, load_page(rt->b_f[0].p_offset)->num_of_keys);
+
+
+    // fflush();
 
     //
     printf("Running...\n");
