@@ -18,10 +18,6 @@ int main(){
         db_insert(i, "test");
     }
 
-    for(int i=-48; i<0; i++) {
-        db_insert(i, "test");
-    }
-
     pr();
     printf("# of Keys in Children: %d %d\n", load_page(rt->next_offset)->num_of_keys, load_page(rt->b_f[0].p_offset)->num_of_keys);
 
