@@ -899,7 +899,7 @@ page* find_smallest_node(int fd, page* root) {
 
 int db_join()
 {
-    // merge join
+    // merge join 준비
     page* p_outer = find_smallest_node(fd, rt);
     page* p_inner = find_smallest_node(fd2, rt2);
     record r_outer;
@@ -910,7 +910,7 @@ int db_join()
     while( !(p_outer->next_offset == 0 && p_inner->next_offset == 0 && 
         outer_idx == p_outer->num_of_keys - 1 && inner_idx == p_inner->num_of_keys - 1)) 
     {
-        // load 1 record from each table
+        // load 1 record from each tables
         // increase r_inner and check if they are same
         // if same -> print, increase p_inner
         // if p_outer > p_inner, increase p_inner
@@ -920,8 +920,8 @@ int db_join()
         record r_outer = p_outer->records[outer_idx];
         record r_inner = p_inner->records[inner_idx];
 
+        // 디버깅용 코드
         // printf("outer_idx: %d, outer_val: %d, inner_idx: %d, inner_val: %d\n", outer_idx, r_outer.key, inner_idx, r_inner.key);
-
 
         if (r_outer.key == r_inner.key) {
             printf("%ld,%s,%s\n", r_outer.key, r_outer.value, r_inner.value);

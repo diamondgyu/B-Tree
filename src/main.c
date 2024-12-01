@@ -6,11 +6,11 @@ int main(){
     char instruction;
     char buf[120];
     char *result;
-    open_table("test1.db", "test2.db");
+    open_table("table1.db", "table2.db");
 
-    FILE *log;
+    // FILE *log;
  
-    log = fopen("log.txt", "w");
+    // log = fopen("log.txt", "w");
 
     // instructions
 
