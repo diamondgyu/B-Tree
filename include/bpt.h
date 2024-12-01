@@ -51,7 +51,7 @@ extern page * rt;
 
 extern H_P * hp;
 // FUNCTION PROTOTYPES.
-int open_table(char * pathname);
+int open_table(char * pathname, char * pathname2);
 H_P * load_header(off_t off);
 page * load_page(off_t off);
 

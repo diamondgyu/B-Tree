@@ -1,10 +1,13 @@
 #include "bpt.h"
 
 H_P * hp; // header page is declared as global
+H_P * hp2;
 
 page * rt = NULL; //root is declared as global
+page* rt2 = NULL;
 
 int fd = -1; //file descriptor is declared as global
+int fd2 = -1;
 
 #define VERBOSE true
 
@@ -35,6 +38,17 @@ H_P * load_header(off_t off) {
     return newhp;
 }
 
+H_P * load_header_fd(int fd, off_t off) {
+    H_P * newhp = (H_P*)calloc(1, sizeof(H_P));
+    if (sizeof(H_P) > pread(fd, newhp, sizeof(H_P), 0)) {
+
+        return NULL;
+    }
+    return newhp;
+}
+
+
+
 page * load_page(off_t off) {
     page* load = (page*)calloc(1, sizeof(page));
     //if (off % sizeof(page) != 0) printf("load fail : page offset error\n");
@@ -45,7 +59,17 @@ page * load_page(off_t off) {
     return load;
 }
 
-int open_table(char * pathname) {
+page * load_page_fd(int fd, off_t off) {
+    page* load = (page*)calloc(1, sizeof(page));
+    //if (off % sizeof(page) != 0) printf("load fail : page offset error\n");
+    if (sizeof(page) > pread(fd, load, sizeof(page), off)) {
+
+        return NULL;
+    }
+    return load;
+}
+
+int open_table(char * pathname, char * pathname2) {
     fd = open(pathname, O_RDWR | O_CREAT | O_EXCL | O_SYNC  , 0775);
     hp = (H_P *)calloc(1, sizeof(H_P));
     if (fd > 0) {
@@ -55,8 +79,8 @@ int open_table(char * pathname) {
         hp->rpo = 0;
         pwrite(fd, hp, sizeof(H_P), 0);
         free(hp);
-        hp = load_header(0);
-        return 0;
+        hp = load_header_fd(fd, 0);
+        // return 0;
     }
     fd = open(pathname, O_RDWR|O_SYNC);
     if (fd > 0) {
@@ -65,7 +89,33 @@ int open_table(char * pathname) {
             return -1;
         }
         off_t r_o = hp->rpo;
-        rt = load_page(r_o);
+        rt = load_page_fd(fd, r_o);
+        // return 0;
+    } // else return -1;
+
+    if (rt == NULL || hp == NULL || fd < 0)
+        return -1;
+
+    fd2 = open(pathname2, O_RDWR | O_CREAT | O_EXCL | O_SYNC  , 0775);
+    hp2 = (H_P *)calloc(1, sizeof(H_P));
+    if (fd2 > 0) {
+        //printf("New File created\n");
+        hp2->fpo = 0;
+        hp2->num_of_pages = 1;
+        hp2->rpo = 0;
+        pwrite(fd2, hp2, sizeof(H_P), 0);
+        free(hp2);
+        hp2 = load_header_fd(fd2, 0);
+        return 0;
+    }
+    fd2 = open(pathname2, O_RDWR|O_SYNC);
+    if (fd2 > 0) {
+        //printf("Read Existed File\n");
+        if (sizeof(H_P) > pread(fd2, hp2, sizeof(H_P), 0)) {
+            return -1;
+        }
+        off_t r_o = hp2->rpo;
+        rt2 = load_page_fd(fd2, r_o);
         return 0;
     }
     else return -1;
@@ -837,4 +887,78 @@ int db_delete(int64_t key) {
     rt = load_page(hp->rpo);
 
     return res;
+}
+
+page* find_smallest_node(int fd, page* root) {
+    page* leaf = root;
+    while (!leaf->is_leaf) {
+        leaf = load_page_fd(fd, leaf->next_offset);
+    }
+    return leaf;
+}
+
+int db_join()
+{
+    // merge join
+    page* p_outer = find_smallest_node(fd, rt);
+    page* p_inner = find_smallest_node(fd2, rt2);
+    record r_outer;
+    record r_inner;
+    int outer_idx = 0;
+    int inner_idx = 0;
+
+    while( !(p_outer->next_offset == 0 && p_inner->next_offset == 0 && 
+        outer_idx == p_outer->num_of_keys - 1 && inner_idx == p_inner->num_of_keys - 1)) 
+    {
+        // load 1 record from each table
+        // increase r_inner and check if they are same
+        // if same -> print, increase p_inner
+        // if p_outer > p_inner, increase p_inner
+        // if p_outer < p_inner, increase p_outer
+        // if new page load is needed, load new page and reset idx for that table.
+
+        record r_outer = p_outer->records[outer_idx];
+        record r_inner = p_inner->records[inner_idx];
+
+        // printf("outer_idx: %d, outer_val: %d, inner_idx: %d, inner_val: %d\n", outer_idx, r_outer.key, inner_idx, r_inner.key);
+
+
+        if (r_outer.key == r_inner.key) {
+            printf("%ld,%s,%s\n", r_outer.key, r_outer.value, r_inner.value);
+            // last record, early stopping
+            if (outer_idx == p_outer->num_of_keys - 1 && p_outer->next_offset == 0) {
+                return 0;
+            }
+            else if (outer_idx == p_outer->num_of_keys - 1) {
+                p_outer = load_page_fd(fd, p_outer->next_offset);
+                outer_idx = 0;
+            } else outer_idx++;
+        }
+        else if(r_outer.key < r_inner.key)
+        {
+            // last record
+            if (outer_idx == p_outer->num_of_keys - 1 && p_outer->next_offset == 0) {
+                return 0;
+            }
+            else if (outer_idx == p_outer->num_of_keys - 1) {
+                p_outer = load_page_fd(fd, p_outer->next_offset);
+                outer_idx = 0;
+            } else outer_idx++;
+        }
+        else // outer.key > inner.key
+        {
+            // last record
+            if (inner_idx == p_inner->num_of_keys - 1 && p_inner->next_offset == 0) {
+                return 0;
+            }
+            else if (inner_idx == p_inner->num_of_keys - 1) {
+                p_inner = load_page_fd(fd2, p_inner->next_offset);
+                inner_idx = 0;
+            } else inner_idx++;
+            
+        }
+        
+
+    }
+    return 0;
 }

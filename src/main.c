@@ -6,7 +6,7 @@ int main(){
     char instruction;
     char buf[120];
     char *result;
-    open_table("DB2021083681.db");
+    open_table("test1.db", "test2.db");
 
     FILE *log;
  
@@ -14,29 +14,9 @@ int main(){
 
     // instructions
 
-    for(int i=0; i<4000; i++) {
-        db_insert(i, "test");
-    }
-
-    pr();
-    printf("# of Keys in Children: %d %d\n", load_page(rt->next_offset)->num_of_keys, load_page(rt->b_f[0].p_offset)->num_of_keys);
-
-    // Deletes two leaf nodes of rt->next_offset completely (125->123)
-    // So rt->next offset does not have enough children
-    // Sibling has 127 nodes -> internal redistribution
-    for(int i=2000; i<2017; i++) {
-        db_delete(i);
-    }   
-
-    pr();
-    printf("# of Keys in Children: %d %d\n", load_page(rt->next_offset)->num_of_keys, load_page(rt->b_f[0].p_offset)->num_of_keys);
-
-
-    // fflush();
-
-    //
-    printf("Running...\n");
-    //
+    // for(int i=0; i<4000; i++) {
+    //     db_insert(i*100, "test");
+    // }
 
     while(scanf("%c", &instruction) != EOF){
         switch(instruction){
@@ -65,6 +45,9 @@ int main(){
             case 'q':
                 while (getchar() != (int)'\n');
                 return EXIT_SUCCESS;
+                break;
+            case 'j':
+                db_join();
                 break;   
 
         }
